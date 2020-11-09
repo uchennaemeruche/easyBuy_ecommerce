@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "256923179745",
+    "firebase_url": "https://easybuy-5d40a.firebaseio.com",
+    "project_id": "easybuy-5d40a",
+    "storage_bucket": "easybuy-5d40a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256923179745:android:8b0dcd1c62c341f40875a0",
+        "android_client_info": {
+          "package_name": "com.asktech.e_commerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256923179745-dp1ts5433unsk5qph35vvvo82m24it8s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asktech.e_commerce_app",
+            "certificate_hash": "96cf3c4c9007cced83c15c20c02f069df55419f7"
+          }
+        },
+        {
+          "client_id": "256923179745-nfocp1nkk0glre5jpou0889t7obgohbd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBklN2IYrL92CVcZMDNCsBQk8SMVgnntpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256923179745-nfocp1nkk0glre5jpou0889t7obgohbd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "256923179745-35amf4j5rvdc3u3luge10cbq7see93jg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.asktech.eCommerceApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

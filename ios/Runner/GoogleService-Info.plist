@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>256923179745-35amf4j5rvdc3u3luge10cbq7see93jg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.256923179745-35amf4j5rvdc3u3luge10cbq7see93jg</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBpUFsEc-8uQeAzgxoiQKCz_P-KsI8qRXM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>256923179745</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.asktech.eCommerceApp</string>
+	<key>PROJECT_ID</key>
+	<string>easybuy-5d40a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>easybuy-5d40a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<true/>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:256923179745:ios:6d68b381c4c78d860875a0</string>
+	<key>DATABASE_URL</key>
+	<string>https://easybuy-5d40a.firebaseio.com</string>
+</dict>
+</plist>
