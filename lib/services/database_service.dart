@@ -115,6 +115,16 @@ class DatabaseService {
     return docRef;
   }
 
+  Future updateCategory(Category category) async {
+    try {
+      await categoryCollection.doc(category.id).update(category.toMap());
+      return true;
+    } catch (e) {
+      if (e is PlatformException) return e.message;
+      return false;
+    }
+  }
+
   Future deleteCategory(String docId) async {
     print("ID to deleted: $docId");
     await categoryCollection.doc(docId).delete().then((value) {

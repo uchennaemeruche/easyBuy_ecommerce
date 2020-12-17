@@ -35,7 +35,10 @@ class AddProductCategory extends StatefulWidget {
 class _AddProductCategoryState extends State<AddProductCategory> {
   DatabaseService _dbService = DatabaseService();
   String catName = "";
+  String catId = "";
   final _formKey = GlobalKey<FormState>();
+  TextEditingController _controller = TextEditingController();
+  bool isAdding = true;
 
   List<String> _category = [];
 
@@ -56,12 +59,23 @@ class _AddProductCategoryState extends State<AddProductCategory> {
     });
   }
 
+  void Function(Category) editCategory(category) {
+    print("Hey uche $category");
+    setState(() {
+      catName = category.name;
+      _controller.text = category.name;
+      catId = category.id;
+      isAdding = false;
+    });
+  }
+
   bool _isError = false;
   String _error = "";
 
   @override
   void initState() {
     super.initState();
+    _controller.text = catName;
   }
 
   @override
@@ -99,7 +113,7 @@ class _AddProductCategoryState extends State<AddProductCategory> {
                         children: <Widget>[
                           // buildAddEditProductForm(context),
                           SizedBox(height: 20),
-                          CategoryCard()
+                          CategoryCard(editCategory: editCategory),
                         ],
                       ),
                     ),
@@ -115,11 +129,19 @@ class _AddProductCategoryState extends State<AddProductCategory> {
     return Form(
       key: _formKey,
       child: TextFormField(
+        controller: _controller,
         onSaved: (value) {
           print("value: $value");
-          setState(() => catName = value);
+          setState(() {
+            catName = value;
+            _controller.text = value;
+          });
         },
         onChanged: (value) {
+          setState(() {
+            // _controller.text = value;
+            catName = value;
+          });
           if (value.isNotEmpty) {
             setState(() {
               _error = "";
@@ -169,21 +191,32 @@ class _AddProductCategoryState extends State<AddProductCategory> {
                     bottomRight: Radius.circular(20.0),
                   ),
                 ),
-                child: SvgPicture.asset(
-                  "assets/icons/Plus Icon.svg",
-                  color: Colors.white,
-                ),
+                child: isAdding
+                    ? SvgPicture.asset(
+                        "assets/icons/Plus Icon.svg",
+                        color: Colors.white,
+                      )
+                    : Icon(Icons.update, color: Colors.white),
               ),
               onTap: () async {
                 _formKey.currentState.validate();
                 FormState form = _formKey.currentState;
                 form.save();
 
-                dynamic res = await _dbService.createCategory(
-                  Category(
-                    name: catName,
-                  ),
-                );
+                dynamic res;
+                if (isAdding)
+                  res = await _dbService.createCategory(
+                    Category(
+                      name: catName,
+                    ),
+                  );
+                else
+                  res = await _dbService.updateCategory(
+                    Category(
+                      name: catName,
+                      id: catId,
+                    ),
+                  );
               }),
         ),
       ),
@@ -287,14 +320,14 @@ class _AddProductCategoryState extends State<AddProductCategory> {
   }
 }
 
-class CategoryCard extends StatefulWidget {
-  @override
-  _CategoryCardState createState() => _CategoryCardState();
-}
+class CategoryCard extends StatelessWidget {
+  final Function editCategory;
 
-class _CategoryCardState extends State<CategoryCard> {
+  CategoryCard({Key key, this.editCategory}) : super(key: key);
+
   bool _selected = false, _isReadOnly = true;
   DatabaseService _dbService = DatabaseService();
+
   @override
   Widget build(BuildContext context) {
     final List<Category> categories = Provider.of<List<Category>>(context);
@@ -309,22 +342,11 @@ class _CategoryCardState extends State<CategoryCard> {
               margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
               child: InputChip(
                 selected: _selected,
-                label: TextFormField(
-                  onTap: () {},
-                  initialValue: categories[index].name,
-                  readOnly: categories[index].isReadOnly,
-                  autocorrect: false,
-                  scrollPadding: EdgeInsets.all(10.0),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.zero,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(style: BorderStyle.none),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(style: BorderStyle.none),
-                    ),
-                  ),
-                ),
+                label: InkWell(
+                    onTap: () {
+                      editCategory(categories[index]);
+                    },
+                    child: Text(categories[index].name)),
                 avatar: CircleAvatar(
                   child: Icon(Icons.edit),
                 ),
@@ -337,14 +359,23 @@ class _CategoryCardState extends State<CategoryCard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Sure to delete??"),
-                              Text("Yes"),
+                              Builder(builder: (context) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    await _dbService
+                                        .deleteCategory(categories[index].id);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Yes"),
+                                );
+                              }),
                             ],
                           ),
                           backgroundColor: Colors.grey,
                           duration: Duration(seconds: 120),
                           action: SnackBarAction(
                             label: "No",
-                            textColor: Colors.green,
+                            textColor: Colors.white,
                             onPressed: () {},
                           ),
                         ),

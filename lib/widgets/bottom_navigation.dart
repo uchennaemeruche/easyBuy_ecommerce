@@ -1,4 +1,5 @@
 import 'package:e_commerce_app/screens/account/account_screen.dart';
+import 'package:e_commerce_app/screens/favProduct/favourite_product.dart';
 import 'package:e_commerce_app/screens/home/home_screen.dart';
 import 'package:e_commerce_app/screens/product/product_screen.dart';
 import 'package:e_commerce_app/utilities/constants.dart';
@@ -92,6 +93,8 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
             } else if (index == 0 &&
                 ModalRoute.of(context).settings.name != "/home") {
               navigateToScreen(HomeScreen.routeName);
+            } else if (index == 2) {
+              navigateToScreen(FavoriteProduct.routeName);
             }
           }),
     );

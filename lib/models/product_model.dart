@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Product {
   final String name, description;
   final double rating, price;
-  final bool isPopular, isFavourite;
+  bool isPopular, isFavourite;
   List<dynamic> images;
   final List<Color> colors;
   final List<String> categories;

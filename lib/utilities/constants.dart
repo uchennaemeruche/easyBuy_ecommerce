@@ -14,6 +14,12 @@ const kTextColor = Color(0xFF757575);
 const kHeadlingTextColor = Color(0xFF8B8B8B);
 const kAnimationDuration = Duration(milliseconds: 200);
 
+final Color firstCircleColor = Colors.white.withOpacity(0.3);
+final Color secondCircleColor = Colors.white.withOpacity(0.4);
+final Color thirdCircleColor = Colors.white.withOpacity(0.6);
+final Color bgColor = Color(0xFFE4E6F1);
+final Color pColor = Color(0xFFFF9F59);
+
 final TextStyle headerTextStyle = TextStyle(
     color: Colors.black,
     fontSize: getProportionateScreenWidth(28.0),

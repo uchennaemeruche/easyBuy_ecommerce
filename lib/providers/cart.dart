@@ -1,5 +1,7 @@
 import 'package:e_commerce_app/models/cart_model.dart';
+import 'package:e_commerce_app/models/product_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class Cart with ChangeNotifier {
   List<CartModel> items = [];
@@ -10,9 +12,21 @@ class Cart with ChangeNotifier {
     });
   }
 
-  void addToCart(CartModel item) {
-    items.add(item);
-    notifyListeners();
+  bool isAdded(Product item) {
+    var contain = items.where((element) => element.product.id == item.id);
+    if (contain.isEmpty)
+      return false;
+    else
+      return true;
+  }
+
+  addToCart(CartModel item) {
+    print("${isAdded(item.product)}");
+    if (!isAdded(item.product)) {
+      items.add(item);
+      notifyListeners();
+    } else
+      print("Product is already in cart");
   }
 
   void removeFromCart(CartModel item) {
@@ -26,7 +40,10 @@ class Cart with ChangeNotifier {
   }
 
   void decreaseQty(index) {
-    items[index].qty--;
+    if (items[index].qty > 1) {
+      items[index].qty--;
+    }
+
     notifyListeners();
   }
 }

@@ -262,7 +262,8 @@ class _AdminProductListState extends State<AdminProductList> {
                     children: <Widget>[
                       SizedBox(width: 18),
                       CircleAvatar(
-                        child: Icon(Icons.list),
+                        child: Icon(Icons.list, color: Colors.white),
+                        backgroundColor: kPrimaryColor,
                       ),
                       SizedBox(width: 12),
                       Expanded(

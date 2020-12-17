@@ -18,6 +18,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   final String productCategory = "Electronics";
+  String searchCriteria = '';
 
   final List<Map<String, dynamic>> sortParams = [
     {"icon": Icons.format_list_bulleted, "isSelected": false},
@@ -30,6 +31,13 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     int countRow = (width / cardWidth).toInt();
+
+    final ProductArguments args = ModalRoute.of(context).settings.arguments;
+    String searchParam;
+    if (args != null) {
+      searchParam = args.searchCriteria;
+    }
+    searchCriteria = searchParam ?? '';
 
     return StreamProvider<List<Product>>.value(
         value: DatabaseService().products,
@@ -68,7 +76,13 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
-                        SearchTextField(searchCriteria: productCategory),
+                        SearchTextField(
+                          hintText: productCategory,
+                          searchCriteria: searchCriteria,
+                          onChanged: (value) {
+                            setState(() => searchCriteria = value);
+                          },
+                        ),
                         SizedBox(height: getProportionateScreenHeight(30.0)),
                         Row(
                           children: [
@@ -91,6 +105,10 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                             ),
                             Spacer(),
+                            FlatButton(
+                                onPressed: () =>
+                                    setState(() => searchCriteria = ''),
+                                child: Text("Clear Search")),
                             Text("FILTER",
                                 style: TextStyle(
                                   color: Colors.blueGrey[300],
@@ -103,8 +121,27 @@ class _ProductScreenState extends State<ProductScreen> {
                         Builder(builder: (BuildContext context) {
                           List<Product> products =
                               Provider.of<List<Product>>(context);
+                          List<Product> searchableProducts = [];
+                          if (products != null) {
+                            searchableProducts = products
+                                .where((product) =>
+                                    product.name.toLowerCase().contains(
+                                          searchCriteria.toLowerCase(),
+                                        ) ||
+                                    product.description.toLowerCase().contains(
+                                          searchCriteria.toLowerCase(),
+                                        ) ||
+                                    product.categories.any(
+                                      (category) =>
+                                          category.toLowerCase().contains(
+                                                searchCriteria.toLowerCase(),
+                                              ),
+                                    ))
+                                .toList();
+                          } else
+                            searchableProducts = null;
 
-                          return products != null
+                          return searchableProducts != null
                               ? GridView.count(
                                   primary: false,
                                   padding: const EdgeInsets.all(1.5),
@@ -114,9 +151,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                   crossAxisSpacing: 10.0,
                                   children: [
                                     ...List.generate(
-                                      products.length,
+                                      searchableProducts.length,
                                       (index) => ProductCard(
-                                        product: products[index],
+                                        product: searchableProducts[index],
                                       ),
                                     )
                                   ],
@@ -134,4 +171,10 @@ class _ProductScreenState extends State<ProductScreen> {
           );
         });
   }
+}
+
+class ProductArguments {
+  final String searchCriteria;
+
+  ProductArguments({this.searchCriteria});
 }

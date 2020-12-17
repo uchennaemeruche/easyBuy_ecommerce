@@ -7,6 +7,7 @@ import 'package:e_commerce_app/utilities/size_config.dart';
 import 'package:e_commerce_app/widgets/custom_social_icon.dart';
 import 'package:e_commerce_app/widgets/default_button.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   int selectedColor = 4;
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<Cart>(context);
     final ProductDetailsArguments args =
         ModalRoute.of(context).settings.arguments;
     final Product product = args.product;
@@ -47,13 +49,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
                               Colors.white.withOpacity(0.3),
                               (product.colors[selectedColor]).withOpacity(0.3)
-                            ])),
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -80,12 +84,24 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   bottom: getProportionateScreenWidth(15.0),
                                   top: getProportionateScreenWidth(15.0)),
                               child: DefaultButton(
-                                text: "Add to Cart",
+                                color: cart.isAdded(product)
+                                    ? Colors.red
+                                    : kPrimaryColor,
+                                text: cart.isAdded(product)
+                                    ? "Remove From Cart"
+                                    : "Add to Cart",
                                 onPressed: () {
-                                  print("Added to cart");
-                                  Provider.of<Cart>(context, listen: false)
-                                      .addToCart(
-                                          CartModel(product: product, qty: 1));
+                                  var productToDelete;
+                                  for (var item in cart.items) {
+                                    if (item.product.id == product.id) {
+                                      productToDelete = item;
+                                    }
+                                  }
+                                  !cart.isAdded(product)
+                                      ? cart.addToCart(
+                                          CartModel(product: product, qty: 1),
+                                        )
+                                      : cart.removeFromCart(productToDelete);
                                   return true;
                                 },
                               ),
@@ -115,16 +131,17 @@ class _ProductDetailsState extends State<ProductDetails> {
         width: getProportionateScreenWidth(40.0),
         height: getProportionateScreenWidth(40.0),
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-                color: selectedColor == index
-                    ? kPrimaryColor
-                    : Color(0xFFF6F7F9))),
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-          color: color,
           shape: BoxShape.circle,
-        )),
+          border: Border.all(
+            color: selectedColor == index ? kPrimaryColor : Color(0xFFF6F7F9),
+          ),
+        ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
       ),
     );
   }
@@ -195,22 +212,38 @@ class _ProductDetailsState extends State<ProductDetails> {
           child:
               Text(product.name, style: Theme.of(context).textTheme.headline6),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Container(
-            padding: EdgeInsets.all(getProportionateScreenWidth(15.0)),
-            width: getProportionateScreenWidth(64.0),
-            decoration: BoxDecoration(
-              color:
-                  product.isFavourite ? Color(0xFFFFE6E6) : Color(0xFFF5F6F9),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                bottomLeft: Radius.circular(20.0),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(20.0)),
+              child: Text(
+                NumberFormat.currency(name: 'Naira', symbol: 'NGN').format(
+                  product.price,
+                ),
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
-            child: SvgPicture.asset("assets/icons/Heart Icon_2.svg",
-                color: product.isFavourite ? kPrimaryColor : null),
-          ),
+            Spacer(),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                padding: EdgeInsets.all(getProportionateScreenWidth(15.0)),
+                width: getProportionateScreenWidth(64.0),
+                decoration: BoxDecoration(
+                  color: product.isFavourite
+                      ? Color(0xFFFFE6E6)
+                      : Color(0xFFF5F6F9),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    bottomLeft: Radius.circular(20.0),
+                  ),
+                ),
+                child: SvgPicture.asset("assets/icons/Heart Icon_2.svg",
+                    color: product.isFavourite ? kPrimaryColor : null),
+              ),
+            ),
+          ],
         ),
         Padding(
           padding: EdgeInsets.only(

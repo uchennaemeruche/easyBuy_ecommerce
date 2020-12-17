@@ -38,67 +38,91 @@ class _BodyState extends State<Body> {
     return SafeArea(
         child: SizedBox(
       width: double.infinity,
-      child: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20.0)),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: getProportionateScreenHeight(20.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: getProportionateScreenHeight(80.0),
+            ),
+            Text(
+              "Welcome Back",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: getProportionateScreenWidth(28.0),
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: getProportionateScreenHeight(8.0),
+            ),
+            Text(
+              "Sign in with your email and password \nor continue with social media",
+              textAlign: TextAlign.center,
+              // style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(height: SizeConfig.screenHeight * 0.08),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20.0),
+                vertical: getProportionateScreenWidth(20.0),
               ),
-              Text(
-                "Welcome Back",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: getProportionateScreenWidth(28.0),
-                    fontWeight: FontWeight.bold),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                // color: Color(0xFFF6F7F9),
+                border: Border.all(
+                  color: Color(0xFFF6F7F9),
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0),
+                ),
               ),
-              SizedBox(
-                height: getProportionateScreenHeight(8.0),
-              ),
-              Text(
-                "Sign in with your email and password \nor continue with social media",
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: SizeConfig.screenHeight * 0.08),
-              SigninForm(),
-              SizedBox(height: SizeConfig.screenHeight * 0.08),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
-                  CustomSocialIcon(
-                      iconPath: "assets/icons/google-icon.svg",
-                      onTap: authService.signInWithGoogle),
-                  CustomSocialIcon(
-                    iconPath: "assets/icons/facebook-2.svg",
+                  SigninForm(),
+                  SizedBox(height: SizeConfig.screenHeight * 0.08),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomSocialIcon(
+                          iconPath: "assets/icons/google-icon.svg",
+                          onTap: authService.signInWithGoogle),
+                      CustomSocialIcon(
+                        iconPath: "assets/icons/facebook-2.svg",
+                      ),
+                      CustomSocialIcon(
+                        iconPath: "assets/icons/twitter.svg",
+                      ),
+                    ],
                   ),
-                  CustomSocialIcon(
-                    iconPath: "assets/icons/twitter.svg",
+                  SizedBox(
+                    height: getProportionateScreenHeight(16.0),
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        Navigator.pushNamed(context, SignupScreen.routeName),
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Don't have an account?",
+                        style: TextStyle(
+                            color: kTextColor,
+                            fontSize: getProportionateScreenWidth(16.0)),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: " Sign up",
+                            style: TextStyle(color: kPrimaryColor),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(16.0),
                   ),
                 ],
               ),
-              SizedBox(
-                height: getProportionateScreenHeight(16.0),
-              ),
-              GestureDetector(
-                onTap: () =>
-                    Navigator.pushNamed(context, SignupScreen.routeName),
-                child: RichText(
-                  text: TextSpan(
-                      text: "Don't have an account?",
-                      style: TextStyle(
-                          color: kTextColor,
-                          fontSize: getProportionateScreenWidth(16.0)),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: " Sign up",
-                            style: TextStyle(color: kPrimaryColor))
-                      ]),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     ));
